@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[scripts]
+server = "python manage.py runserver localhost:88"
+migrate = "python manage.py migrate"
+makemigrate = "python manage.py makemigrations"
+
+[dev-packages]
+
+[packages]
+django = "*"
+djangorestframework = "*"
+python-dotenv = "*"
+django-debug-toolbar = "*"
+mysqlclient = {path = "./mysqlclient-1.4.6-cp38-cp38-win32.whl"}
+
+[requires]
+python_version = "3.8"
