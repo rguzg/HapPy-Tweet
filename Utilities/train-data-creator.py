@@ -9,7 +9,17 @@
 import csv
 import sys
 
+def shorten_sentiment(sentiment):
+    if sentiment.lower() == "positive":
+        return "pos"
+    if sentiment.lower() == "negative":
+        return "neg"
+
 arguments = sys.argv
+
+if len(arguments) < 5:
+    print("This is a command-line utility that uses the following arguments: csv_file_path, text_column, sentiment_column, shorten (true/false), encoding")
+    raise Exception("Correct arguments not found")
 
 csv_file_path = str(arguments[1])
 text_column = str(arguments[2])
@@ -19,13 +29,7 @@ encoding = arguments[5]
 
 print("Using: {0}. Text column is: {1}. Sentiment Column is: {2}. Shortening is set to: {3}. Using the following encoding: {4}".format(csv_file_path, text_column, sentiment_column, shorten, encoding))
 
-output_file = open('outputfile.csv', newline='', mode='w', encoding=encoding)
-
-def shorten_sentiment(sentiment):
-    if sentiment.lower() == "positive":
-        return "pos"
-    if sentiment.lower() == "negative":
-        return "neg"
+output_file = open('outputfile.csv', newline='', mode='w', encoding='utf-8')
 
 with open(csv_file_path, newline='', encoding=encoding) as csvfile:
     reader = csv.DictReader(csvfile)
