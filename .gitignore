@@ -207,4 +207,8 @@ $RECYCLE.BIN/
 # Pipenv
 .env
 
+# Project Specifics
+module-tests
+*.csv
+
 # End of https://www.gitignore.io/api/django,python,windows,visualstudiocode
