@@ -210,5 +210,7 @@ $RECYCLE.BIN/
 # Project Specifics
 module-tests
 *.csv
+Classifiers/*.*
+!Classifiers/blank-classifier.pkl
 
 # End of https://www.gitignore.io/api/django,python,windows,visualstudiocode
