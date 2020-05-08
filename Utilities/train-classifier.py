@@ -38,8 +38,10 @@ csv_data = open(csv_file, newline='', encoding='utf-8')
 #  csv.reader object to convert to the data structure TextBlob requires 
 reader = csv.reader(csv_data)
 
+# Create file for unused samples
 unused_csvfilename = "unused_{0}".format(ntpath.basename(csv_file))
 unused_csvfile = open(unused_csvfilename, 'w', newline='', encoding='utf_8')
+
 item_counter = 0
 
 print("Training...")
