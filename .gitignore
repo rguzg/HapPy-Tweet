@@ -212,5 +212,6 @@ module-tests
 *.csv
 Classifiers/*.*
 !Classifiers/blank-classifier.pkl
+token.txt
 
 # End of https://www.gitignore.io/api/django,python,windows,visualstudiocode
