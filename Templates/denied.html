@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'css/HapPy-Tweet.css' %}">
+
+    <!-- Font -->
+    <link rel="stylesheet" href="{% static 'fonts/stylesheet.css' %}">
+    
+    <!-- Icons library -->
+    <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+
+    <!-- Scripts -->
+    <script defer src="{% static 'js/denied.js' %}"></script>
+
+    <title>HapPy Tweet</title>
+</head>
+<body>
+    <header class="l-fixed-top m-header m-header--blue">
+        <button class="m-button">
+            <i class="fab fa-twitter m-icon--white"></i>
+        </button>
+    </header>
+    <div class="l-main-container h-justify-center-content h-align-center-content">
+        <h1>Oops, an error ocurred!</h1>
+        <h3 class="h-text-align-center">We couldn't get access to your Twitter account</h3>
+        <button class="m-button m-button--blue h-align-center-content" id="back">
+            <i class="fas fa-arrow-circle-left m-icon--white m-icon--margin-right"></i>
+            Go back
+        </button>
+    </div>
+</body>
+</html>
