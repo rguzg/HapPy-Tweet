@@ -213,5 +213,7 @@ module-tests
 Classifiers/*.*
 !Classifiers/blank-classifier.pkl
 token.txt
+apps/Users/migrations
+*.png
 
 # End of https://www.gitignore.io/api/django,python,windows,visualstudiocode

@@ -1,6 +1,7 @@
 /* Base */
 :root{
     --twitter_blue: #1DA1F2;
+    --twitter_grey: #F5F8FA;
     --blue: #1A73E8;
 }
 
@@ -33,6 +34,14 @@ h3{
     padding-bottom: 30px;
 }
 
+h4{
+    margin: 0px;
+}
+
+a{
+    color: var(--twitter_blue);
+}
+
 /* Layout */
 .l-fixed-top{
     display: flex;
@@ -52,7 +61,7 @@ h3{
     max-width: 1140px;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 30px;
+    padding-top: 80px;
     padding-bottom: 30px;
     margin-right: auto;
     margin-left: auto;
@@ -62,7 +71,20 @@ h3{
 .m-header{
     width: 100%;
     height: 50px;
-    justify-content: space-around;
+    top: 0;
+    position: fixed;
+    justify-content: space-between;
+}
+
+.m-header__title{
+    color: white;
+    align-content: center;
+}
+
+.m-header__logo-container{
+    display: flex;
+    color: white;
+    align-items: center;
 }
 
 .m-button{
@@ -92,22 +114,96 @@ h3{
     padding-bottom: 30px;
 }
 
+.m-profile{
+    display: flex;
+    width: 25%;
+    justify-content: flex-end;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.m-profile__container{
+    width: 50%;
+}
+
+.m-profile__picture{
+    width: 40px;
+    height: 40px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 50%;
+    background-image: url('../img/ray.png');
+    background-size: cover;
+}
+
+.m-profile__name{
+    width: 100%;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.m-profile__username{
+    width: 100%;
+    font-size: 15px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    color: var(--twitter_grey);
+}
+
+.m-navigation{
+    width: 100%;
+}
+
+.m-navigation__tabs-container{
+    height: 50px;
+    width: 100%;
+    background-color: #ffffff;
+    position: sticky;
+    top: 50px;
+    display: flex;
+    align-content: center;
+}
+
+.m-navigation__tabs{
+    height: 40px;
+}
+
+.nav-link.active{
+    background-color: var(--twitter_blue) !important;
+    color: #ffffff !important;
+}
+
+.m-navigation__content{
+    width: 100%;
+    margin-top: 10px;
+}
+
 /* Modifiers */
 .m-header--blue{
     background-color: var(--blue);
+}
+
+.m-header--transparent-overlay{
+    height: 100%;
+    width: 100%;
+    display: inherit;
+    justify-content: inherit;
+    background-color: rgba(0,0,0,0.50);
 }
 
 .m-icon--margin-right{
     margin-right: 5px;
 }
 
-.m-icon--white{
+.m--white{
     color: #ffffff;
 }
 
 .m-button--twitter{
-    background-color: var(--twitter_blue);
-    color: #ffffff;
+    background-color: var(--twitter_blue) !important;
+    color: #ffffff !important;
 }
 
 .m-button--blue{
@@ -129,3 +225,45 @@ h3{
 .h-text-align-center{
     text-align: center;
 }
+
+.h-overflow{
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.h-display-none{
+    display: none;
+}
+
+.h-shadow{
+    box-shadow: 0px 3px 6px -4px rgba(0,0,0,0.75);
+}
+
+.h-slide-bottom{
+	animation: slide-bottom 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.h-slide-top{
+	animation: slide-top 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-bottom{
+    0%{
+        transform: translateY(-100px);
+    }
+    100%{
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-top{
+    0%{
+        transform: translateY(0);
+    }
+    100%{
+        transform: translateY(-100px);
+    }
+}
+  

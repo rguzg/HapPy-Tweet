@@ -17,25 +17,67 @@
 
     <!-- Scripts -->
     <script defer src="{% static 'js/home.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
     <title>HapPy Tweet</title>
 </head>
 <body>
-    <header class="l-fixed-top m-header m-header--blue">
-        <button class="m-button">
-            <i class="fab fa-twitter m-icon--white"></i>
-        </button>
+    <header class="l-fixed-top m-header m-header--blue" id="header">
+        <div class="m-header--transparent-overlay">
+            <div class="m-header__logo-container">
+                <button class="m-button">
+                    <i class="fab fa-twitter m--white"></i>
+                </button>
+                <h4 class="m-header__title h-display-none" id="header-title">Feed</h4>
+            </div>
+            <div class="m-profile">
+                <div class="m-profile__picture" id="picture"></div>
+                <div class="m-profile__container">
+                    <div class="m-profile__name m--white h-overflow" id="name"></div>
+                    <div class="m-profile__username h-overflow" id="username"></div>
+                </div>
+            </div>
+        </div>
     </header>
-    <div class="l-main-container h-justify-center-content h-align-center-content">
-        <h1>Welcome to HapPy Tweet beetch!</h1>
-        <h3 class="h-text-align-center"> Do you want a break from the toxicity of social media?</h3>
-        <h3 class="h-text-align-center">
-            HapPy Tweet uses a machine learning algorythm to only show you the positive tweets on your timeline. 
-        </h3>
-        <button class="m-button m-button--twitter h-align-center-content" id="login">
-            <i class="fab fa-twitter m-icon--white m-icon--margin-right"></i>
-            Login with Twitter to get started
-        </button>
+    <div class="l-main-container h-align-center-content">
+        <h1>Feed</h1>
+        <!-- This is Bootstrap's implementation of a tabbed-navigation -->
+        <div class="m-navigation">
+        	<nav class="nav nav-pills m-navigation__tabs-container h-justify-center-content" id="pills-tab" role="tablist">
+                {% for classifier in classifiers %}
+                    <a class="nav-link m-navigation__tabs" id="pills-{{classifier}}-tab" data-toggle="pill" href="#pills-{{classifier}}" role="tab" aria-controls="pills-{{classifier}}" aria-selected="true">{{classifier}}</a>
+                {% endfor %}
+        	</nav>
+        	<div class="tab-content h-justify-center-content" id="pills-tabContent">
+                {% for classifier in classifiers %}
+                    <div class="tab-pane fade m-navigation__content" id="pills-{{classifier}}" role="tabpanel" aria-labelledby="pills-{{classifier}}-tab">
+                        <blockquote class="twitter-tweet" data-theme="light"> <a href="https://twitter.com/kadeart/status/1262945341575327744">May 19, 2020</a></blockquote>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                        <div style="height: 120px; width: 100%;">asdada</div>
+                    </div>
+                {% endfor %}
+        	</div>
+        </div>
     </div>
 </body>
 </html>
