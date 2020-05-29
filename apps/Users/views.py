@@ -1,20 +1,23 @@
 import os
-
+import pickle
+import json
 import tweepy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from textblob import TextBlob
 
 from apps.Users.models import Classifier
 from apps.Users.models import User as user_model
-from apps.Users.serializers import read_classifier_serializer, write_classifier_serializer
+from apps.Users.serializers import (read_classifier_serializer,
+                                    write_classifier_serializer)
 
 # Create your views here.
 
@@ -99,6 +102,37 @@ class home(View):
             return render(request, 'home.html', context)
         else:
             return render(request, 'login.html')
+
+class user_tweets(View):
+    def get(self, request, language, tweet_page):
+        twitter_api = get_tweetpy_object(request)
+        
+        # Get classifier object for selected language. Each classifier might run on a separate process in the future, so that a new object doesn't have to be created everytime the function is called
+        classifier = get_object_or_404(Classifier, name=language)
+
+        with open('Classifiers/{0}'.format(classifier.location), 'rb') as input:
+            opened_classifier = pickle.load(input)
+        # Get tweets from Twitter API
+        # This aproach will lead to repeated tweets, but you're running out of time m8
+        tweets = []
+        # tweets = twitter_api.home_timeline(page=tweet_page)
+        tweets_array = []
+        
+        for tweet in tweets:
+            # Check that a tweet is in the solicited language:
+            if(tweet._json['lang'] == classifier.shortened_name):
+                # Check sentiment of tweet
+                sentiment = TextBlob(tweet._json['text'], classifier=opened_classifier).classify()
+                if(sentiment == 'pos'):
+                    serialized_tweet = {}
+                    serialized_tweet['tweet_id'] = tweet._json['id_str']
+
+                    serialized_tweet['text'] = tweet._json['text']
+
+                    tweets_array.append(serialized_tweet)
+        example = open('example.json', 'r', encoding='utf-8').read()
+        return JsonResponse(json.loads(example), safe=False)
+        # return JsonResponse(tweets_array, safe=False)
 
 # Logs user out
 class twitter_logout(View):

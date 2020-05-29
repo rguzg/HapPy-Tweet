@@ -57,12 +57,12 @@ a{
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: calc(100% - 50px);
+    height: 100%;
     max-width: 1140px;
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 80px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -166,6 +166,12 @@ a{
     align-content: center;
 }
 
+.tab-content{
+    min-height: 80%;
+    display: flex;
+    align-items: center;
+}
+
 .m-navigation__tabs{
     height: 40px;
 }
@@ -178,6 +184,13 @@ a{
 .m-navigation__content{
     width: 100%;
     margin-top: 10px;
+}
+
+.m-loading{
+    width: 30px;
+    height: 30px;
+    background-image: url(../img/loading.svg);
+    background-size: cover;
 }
 
 /* Modifiers */
@@ -224,6 +237,7 @@ a{
 
 .h-text-align-center{
     text-align: center;
+    text-align: -webkit-center;
 }
 
 .h-overflow{
@@ -235,6 +249,10 @@ a{
 
 .h-display-none{
     display: none;
+}
+
+.h-display-contents{
+    display: contents;
 }
 
 .h-shadow{

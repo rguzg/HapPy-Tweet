@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/user', user_views.get_user_data.as_view(), name='api_user'),
     path('api/classifier', user_views.read_classifiers_api.as_view(), name='read_api_classifier'),
     path('api/classifier/create', user_views.write_classifiers_api.as_view(), name='write_api_classifier'),
+    path('api/tweets/<str:language>/<int:tweet_page>', user_views.user_tweets.as_view(), name='user_tweets'),
 ]

@@ -12,4 +12,5 @@ class User(AbstractUser):
 class Classifier(models.Model):
     name = models.CharField(max_length=20)
     location = models.CharField(max_length=100)
+    shortened_name = models.CharField(max_length=2)
     
