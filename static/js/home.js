@@ -29,10 +29,10 @@ async function prepare_front(){
                     let language_container = document.querySelector(`#pills-${classifier.name}`);
                     language_container.removeChild(document.querySelector(`#${classifier.name}-load`));
                 });
-
+                
             });
-
-
+            
+            
         }
     } catch (error) {
         alert(Error);
@@ -53,6 +53,7 @@ async function get_tweets(language){
             // TODO: Make foreach async so that endtext gets inserted properly
             tweets.forEach(tweet => {
                 tweet_container = createTweet(tweet.tweet_id);
+                tweet_container.appendChild(createClassifierTrainer(tweet.tweet_id));
                 language_container.appendChild(tweet_container);
             });
             
@@ -67,16 +68,105 @@ async function get_tweets(language){
 function createTweet(tweet_id){
     let container = document.createElement('div');
     container.setAttribute('data-tweetid', tweet_id);
+    container.classList.add("h-justify-center-content", "h-align-center-content", "h-flex-row-reverse", "h-display-none");
     
     twttr.widgets.createTweet(tweet_id, container, {conversation: 'none'});
-    
+
     return container;
 }
 
+// Creates the like and dislike buttons for each tweet, as well as it's container
+function createClassifierTrainer(tweet_id){
+    let classifer_train = document.createElement('div');
+    classifer_train.classList.add('m-classifier-train');
+    classifer_train.id = tweet_id;
+    
+    let train_text = document.createElement('span');
+    train_text.innerHTML = 'Do you like this tweet?';
+    train_text.classList.add('m-classifier-train__text');
+    
+    let like_button = document.createElement('button');
+    like_button.classList.add("m-button", "m-button--tweet", "m-button--green", "h-justify-center-content", "h-align-center-content");
+    like_button.id = 'like';
+    createTrainingEventListener(like_button, tweet_id, 'pos');
+    
+    let like_icon = document.createElement('i');
+    like_icon.classList.add('fas', 'fa-heart', 'm--white');
+    
+    let dislike_button = document.createElement('button');
+    dislike_button.classList.add("m-button", "m-button--tweet", "m-button--red", "m-button--tweet-dislike", "h-justify-center-content", "h-align-center-content");
+    dislike_button.id = 'dislike';
+    createTrainingEventListener(dislike_button, tweet_id, 'neg');
+    
+    let dislike_icon = document.createElement('i');
+    dislike_icon.classList.add('fas', 'fa-heart-broken', 'm--white');
+    
+    like_button.appendChild(like_icon);
+    dislike_button.appendChild(dislike_icon);
+    
+    classifer_train.appendChild(train_text);
+    classifer_train.appendChild(like_button);
+    classifer_train.appendChild(dislike_button);
+    
+    return classifer_train;
+}
+
+function createTrainingEventListener(button, tweet_id, pos_neg){
+    button.addEventListener('click', async () => {
+        // Show loading icon after request is made
+        let loading_container = document.createElement('div');
+        loading_container.classList.add('m-loading-button');
+        
+        let old_button = button.querySelector('svg');
+        button.replaceChild(loading_container, old_button);
+        try{
+            let request = await fetch(`/api/classifier/train`, 
+            {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include',
+                body: JSON.stringify({sentiment: pos_neg, tweet_id: tweet_id, language: getCurrentTab()})
+                
+            });
+            
+            if (!request.ok) {
+                throw Error("Classifier couldn't be trained");
+            } else {
+                
+                // When the classifier was trained succesfully
+                await request.json().then(() => {
+                    // Change to success icon
+                    let success_icon = document.createElement('i');
+                    success_icon.classList.add('fas', 'fa-check-circle', 'm--white');
+                    
+                    button.replaceChild(success_icon, loading_container);
+                    
+                    // Disable buttons
+                    // This gets all of the buttons inside the trainer container
+                    let trainer = button.parentElement.querySelectorAll('button');
+                    trainer.forEach(element => {
+                        element.disabled = true;
+                    });
+                    
+                });
+                
+            }
+        } catch (error) {
+            // TODO: Icon if promise fails
+            alert(error);
+        }
+    });
+}
+
 function createEndText(){
+    let text_container = document.createElement('div');
+    text_container.id = 'bottom';
+
     let text = document.createElement('p');
-    text.id = 'bottom'
-    text.innerHTML = "Looks like you've reached the end...";
+    text.innerHTML = "Looks like you've reached the end... (Loading more tweets...)";
     
     return text;
 }
@@ -124,9 +214,9 @@ window.onscroll = () => {
         let language = getCurrentTab()
         let currentPage = Number(sessionStorage.getItem(language));
         currentPage++
-
+        
         sessionStorage.setItem(language, currentPage);
-
+        
         get_tweets(language).then(() => {
             let language_container = document.querySelector(`#pills-${language}`);
             language_container.removeChild(document.querySelector(`#bottom`));
@@ -140,6 +230,12 @@ window.onload = () => {
     
     get_user_data();
     prepare_front();
+
+    twttr.events.bind(
+        'rendered',
+        function (event) {
+          event.target.parentNode.classList.remove('h-display-none');
+          event.target.parentNode.classList.add('h-slide-bottom');
+        }
+    );
 };
-
-

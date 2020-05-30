@@ -193,6 +193,26 @@ a{
     background-size: cover;
 }
 
+.m-loading-button{
+    width: 20px;
+    height: 20px;
+    background-image: url(../img/loading-button.svg);
+    background-size: cover;
+}
+
+.m-classifier-train{
+    width: 100px;
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.m-classifier-train__text{
+    width: 80px;
+    margin-bottom: 5px;
+}
+
 /* Modifiers */
 .m-header--blue{
     background-color: var(--blue);
@@ -212,6 +232,26 @@ a{
 
 .m--white{
     color: #ffffff;
+}
+
+.m-button--tweet{
+    height: 40px;
+    margin-bottom: 50px;
+    align-items: center;    
+}
+
+.m-button--tweet-dislike{
+    margin-bottom: 0px;
+}
+
+.m-button--green{
+    background-color: #28A745 !important;
+    color: #ffffff !important;
+}
+
+.m-button--red{
+    background-color: #DC3545 !important;
+    color: #ffffff !important;
 }
 
 .m-button--twitter{
@@ -267,6 +307,19 @@ a{
 	animation: slide-top 0.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
+.h-slide-forward-center{
+	animation: slide-fwd-center 2.0s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.h-flex-row-reverse{
+    flex-direction: row-reverse;
+}
+
+/* Twitter widgets now have a z-index built-in, this property makes sure the header stays on top  */
+.h-twitter-zindex{
+    z-index: 999999999;
+}
+
 @keyframes slide-bottom{
     0%{
         transform: translateY(-100px);
@@ -284,4 +337,15 @@ a{
         transform: translateY(-100px);
     }
 }
+
+@keyframes slide-fwd-center {
+    0% {
+      -webkit-transform: translateZ(0);
+              transform: translateZ(0);
+    }
+    100% {
+      -webkit-transform: translateZ(160px);
+              transform: translateZ(160px);
+    }
+  }
   

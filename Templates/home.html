@@ -25,7 +25,7 @@
     <title>HapPy Tweet</title>
 </head>
 <body>
-    <header class="l-fixed-top m-header m-header--blue" id="header">
+    <header class="l-fixed-top m-header m-header--blue h-twitter-zindex" id="header">
         <div class="m-header--transparent-overlay">
             <div class="m-header__logo-container">
                 <button class="m-button">
@@ -46,7 +46,7 @@
         <h1>Feed</h1>
         <!-- This is Bootstrap's implementation of a tabbed-navigation -->
         <div class="m-navigation">
-        	<nav class="nav nav-pills m-navigation__tabs-container h-justify-center-content" id="pills-tab" role="tablist">
+        	<nav class="nav nav-pills m-navigation__tabs-container h-justify-center-content h-twitter-zindex" id="pills-tab" role="tablist">
                 {% for classifier in classifiers %}
                     <a class="nav-link m-navigation__tabs" id="pills-{{classifier}}-tab" data-toggle="pill" href="#pills-{{classifier}}" role="tab" aria-controls="pills-{{classifier}}" aria-selected="true" data-language="{{classifier}}">{{classifier}}</a>
                 {% endfor %}
@@ -55,12 +55,6 @@
                 {% for classifier in classifiers %}
                     <div class="tab-pane fade m-navigation__content h-text-align-center" id="pills-{{classifier}}" role="tabpanel" aria-labelledby="pills-{{classifier}}-tab">
                         <div class="m-loading" id="{{classifier}}-load">
-                        </div>
-                        <div data-tweetid="1266160505632296960">
-                            <div class="twitter-tweet twitter-tweet-rendered" style="display: flex; max-width: 500px; width: 100%; margin-top: 10px; margin-bottom: 10px;">
-                                <iframe id="twitter-widget-10" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true" class="" style="position: static; visibility: visible; width: 500px; height: 245px; display: block; flex-grow: 1;" title="Twitter Tweet" src="https://platform.twitter.com/embed/index.html?dnt=false&amp;embedId=twitter-widget-10&amp;frame=false&amp;hideCard=false&amp;hideThread=true&amp;id=1266160505632296960&amp;lang=en&amp;origin=http%3A%2F%2Flocalhost%3A88%2F&amp;theme=light&amp;widgetsVersion=c4096c4b%3A1589303485003&amp;width=500px" data-tweet-id="1266160505632296960"></iframe>
-                            </div>
-                            
                         </div>
                     </div>
                 {% endfor %}
