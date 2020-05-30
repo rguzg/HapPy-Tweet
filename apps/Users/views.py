@@ -1,6 +1,7 @@
+import json
 import os
 import pickle
-import json
+
 import tweepy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -91,6 +92,7 @@ class callback(View):
 class home(View):
     def get(self, request):
         if request.user.is_authenticated:
+
             # Get number of classifiers to display on template:
             all_classifiers = Classifier.objects.all()
             classifier_name = []
@@ -106,30 +108,29 @@ class home(View):
 class user_tweets(View):
     def get(self, request, language, tweet_page):
         twitter_api = get_tweetpy_object(request)
-        
+
         # Get classifier object for selected language. Each classifier might run on a separate process in the future, so that a new object doesn't have to be created everytime the function is called
         classifier = get_object_or_404(Classifier, name=language)
-
         with open('Classifiers/{0}'.format(classifier.location), 'rb') as input:
             opened_classifier = pickle.load(input)
         # Get tweets from Twitter API
-        # This aproach will lead to repeated tweets, but you're running out of time m8
-        tweets = []
-        # tweets = twitter_api.home_timeline(page=tweet_page)
-        tweets_array = []
+        # tweets =  tweet_stream(request)
         
-        for tweet in tweets:
-            # Check that a tweet is in the solicited language:
-            if(tweet._json['lang'] == classifier.shortened_name):
-                # Check sentiment of tweet
-                sentiment = TextBlob(tweet._json['text'], classifier=opened_classifier).classify()
-                if(sentiment == 'pos'):
-                    serialized_tweet = {}
-                    serialized_tweet['tweet_id'] = tweet._json['id_str']
+        # tweets_array = []
 
-                    serialized_tweet['text'] = tweet._json['text']
+        # for i in range(tweet_page-1 * 20, tweet_page *20):
+        #     # Check that a tweet is in the solicited language:
+        #     if(tweets[i]._json['lang'] == classifier.shortened_name):
+        #         # Check sentiment of tweet
+        #         sentiment = TextBlob(tweets[i]._json['text'], classifier=opened_classifier).classify()
+        #         if(sentiment == 'pos'):
+        #             serialized_tweet = {}
+        #             serialized_tweet['tweet_id'] = tweets[i]._json['id_str']
 
-                    tweets_array.append(serialized_tweet)
+        #             serialized_tweet['text'] = tweets[i]._json['text']
+
+        #             tweets_array.append(serialized_tweet)
+        
         example = open('example.json', 'r', encoding='utf-8').read()
         return JsonResponse(json.loads(example), safe=False)
         # return JsonResponse(tweets_array, safe=False)
@@ -154,7 +155,6 @@ class get_user_data(View):
             'profile_image_url': credentials._json['profile_image_url'],
             'profile_banner_url': credentials._json['profile_banner_url']
             }
-
         return JsonResponse(user_data)
 
 # Rest API read-only endpoint for classfiers
@@ -170,6 +170,32 @@ class write_classifiers_api(CreateAPIView):
     queryset = Classifier.objects.all()
     serializer_class = write_classifier_serializer
 
+# Trains classifier from a user tweet
+@method_decorator(csrf_exempt, name='dispatch')
+class train_classifiers_api(View):
+    def post(self, request):
+        # Get tweet text from twitter api, request.body is used because django can't handle application/json type post data
+        request_json = json.loads(request.body)
+        tweet_id = request_json['tweet_id']
+        sentiment = request_json['sentiment']
+        language = request_json['language']
+
+        api = get_tweetpy_object(request)
+        tweet_text = api.get_status(tweet_id, include_my_retweet = False, include_entities = False, include_ext_alt_text = False, include_card_uri= False)
+        tweet_text = tweet_text._json['text']
+
+        # Opening pickled classifier
+        with open('Classifiers/{0}.pkl'.format(language.lower()), 'rb') as input:
+            opened_classifier = pickle.load(input)
+
+        opened_classifier.update([(tweet_text, sentiment)])
+        print("training {0} with tweet {1}, {2}".format(language, tweet_id, sentiment))
+        # Saving updated classifier
+        with open('Classifiers/{0}.pkl'.format(language.lower()), 'wb') as output:
+            pickle.dump(opened_classifier, output, pickle.HIGHEST_PROTOCOL)
+
+        return JsonResponse({'status': 201})
+
 # Returns a tweetpy object ready to make API calls to
 def get_tweetpy_object(request):
     # Rebuild auth object 
@@ -177,3 +203,14 @@ def get_tweetpy_object(request):
     auth.set_access_token(request.session['token'], request.session['token_secret'])
 
     return tweepy.API(auth)
+
+def tweet_stream(request):
+    api = get_tweetpy_object(request)
+    cursor = tweepy.Cursor(api.home_timeline).items(100)
+
+    tweet_array = []
+
+    for status in cursor:
+        tweet_array.append(status)
+
+    return tweet_array

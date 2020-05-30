@@ -215,5 +215,6 @@ Classifiers/*.*
 token.txt
 apps/Users/migrations
 *.png
+*.json
 
 # End of https://www.gitignore.io/api/django,python,windows,visualstudiocode
