@@ -81,7 +81,21 @@ a{
     align-content: center;
 }
 
+.m-header__logo-image{
+    background: url(../img/favicon.png);
+    background-size: cover;
+    height: 40px;
+    width: 40px;
+}
+
 .m-header__logo-container{
+    display: flex;
+    color: white;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.m-header__logout{
     display: flex;
     color: white;
     align-items: center;
@@ -132,7 +146,7 @@ a{
     margin-top: 5px;
     margin-bottom: 5px;
     border-radius: 50%;
-    background-image: url('../img/ray.png');
+    background-image: url('../img/loading-button.svg');
     background-size: cover;
 }
 

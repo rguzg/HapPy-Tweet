@@ -43,9 +43,10 @@ async function get_tweets(language){
     let currentPage = sessionStorage.getItem(language);
     try{
         let request = await fetch(`/api/tweets/${language}/${currentPage}`);
-        if (!request.ok) {
+        if (!request.ok || request.status === 429) {
             throw Error("Tweets couldn't be loaded");
         } else {
+            console.log(request);
             let tweets = await request.json();
             
             let language_container = document.querySelector(`#pills-${language}`);
@@ -60,7 +61,11 @@ async function get_tweets(language){
             language_container.appendChild(createEndText());
         }
     } catch (error) {
-        alert(error);
+        let language_container = document.querySelector(`#pills-${language}`);
+        if(document.querySelector(`#bottom`)){
+            language_container.removeChild(document.querySelector(`#bottom`));
+        }
+        language_container.appendChild(createErrorEndText());
     }
 }
 
@@ -167,8 +172,22 @@ function createEndText(){
 
     let text = document.createElement('p');
     text.innerHTML = "Looks like you've reached the end... (Loading more tweets...)";
+
+    text_container.appendChild(text);
     
-    return text;
+    return text_container;
+}
+
+function createErrorEndText(){
+    let text_container = document.createElement('div');
+    text_container.id = 'bottom-true';
+
+    let text = document.createElement('p');
+    text.innerHTML = "Looks like you've reached the <b>true</b> end... <br> Twitter limits the amounts of requests we can make per day. Please try again later.";
+
+    text_container.appendChild(text);
+    
+    return text_container;
 }
 
 function update_name(new_name){
@@ -177,6 +196,7 @@ function update_name(new_name){
 
 function update_username(new_username){
     document.querySelector('#username').innerHTML = `@${new_username}`;
+
 }
 
 function update_picture(new_picture){
@@ -211,9 +231,9 @@ window.onscroll = () => {
     // TODO: Non jQuery implementarion
     // Checks when page is scrolled to the bottom
     if($(window).scrollTop() + $(window).height() == $(document).height()) {
-        let language = getCurrentTab()
+        let language = getCurrentTab();
         let currentPage = Number(sessionStorage.getItem(language));
-        currentPage++
+        currentPage++;
         
         sessionStorage.setItem(language, currentPage);
         
@@ -238,4 +258,8 @@ window.onload = () => {
           event.target.parentNode.classList.add('h-slide-bottom');
         }
     );
+
+    document.querySelector('#logout').addEventListener('click', async () =>{
+        window.location.replace('/logout');
+    });
 };
