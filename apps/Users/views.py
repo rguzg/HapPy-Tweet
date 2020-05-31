@@ -107,34 +107,36 @@ class home(View):
 
 class user_tweets(View):
     def get(self, request, language, tweet_page):
-        twitter_api = get_tweetpy_object(request)
+        try:
+            twitter_api = get_tweetpy_object(request)
 
-        # Get classifier object for selected language. Each classifier might run on a separate process in the future, so that a new object doesn't have to be created everytime the function is called
-        classifier = get_object_or_404(Classifier, name=language)
-        with open('Classifiers/{0}'.format(classifier.location), 'rb') as input:
-            opened_classifier = pickle.load(input)
-        # Get tweets from Twitter API
-        # tweets =  tweet_stream(request)
-        
-        # tweets_array = []
+            # Get classifier object for selected language. Each classifier might run on a separate process in the future, so that a new object doesn't have to be created everytime the function is called
+            classifier = get_object_or_404(Classifier, name=language)
+            with open('Classifiers/{0}'.format(classifier.location), 'rb') as input:
+                opened_classifier = pickle.load(input)
+            # Get tweets from Twitter API
+            tweets =  tweet_stream(request)
+            
+            tweets_array = []
 
-        # for i in range(tweet_page-1 * 20, tweet_page *20):
-        #     # Check that a tweet is in the solicited language:
-        #     if(tweets[i]._json['lang'] == classifier.shortened_name):
-        #         # Check sentiment of tweet
-        #         sentiment = TextBlob(tweets[i]._json['text'], classifier=opened_classifier).classify()
-        #         if(sentiment == 'pos'):
-        #             serialized_tweet = {}
-        #             serialized_tweet['tweet_id'] = tweets[i]._json['id_str']
+            for i in range(tweet_page * 20, tweet_page+1 *20):
+                # Check that a tweet is in the solicited language:
+                if(tweets[i]._json['lang'] == classifier.shortened_name):
+                    # Check sentiment of tweet
+                    sentiment = TextBlob(tweets[i]._json['text'], classifier=opened_classifier).classify()
+                    if(sentiment == 'pos'):
+                        serialized_tweet = {}
+                        serialized_tweet['tweet_id'] = tweets[i]._json['id_str']
 
-        #             serialized_tweet['text'] = tweets[i]._json['text']
+                        serialized_tweet['text'] = tweets[i]._json['text']
 
-        #             tweets_array.append(serialized_tweet)
-        
-        example = open('example.json', 'r', encoding='utf-8').read()
-        return JsonResponse(json.loads(example), safe=False)
-        # return JsonResponse(tweets_array, safe=False)
-
+                        tweets_array.append(serialized_tweet)
+            
+            # example = open('example.json', 'r', encoding='utf-8').read()
+            # return JsonResponse(json.loads(example), safe=False)
+            return JsonResponse(tweets_array, safe=False)
+        except tweepy.TweepError as rate_limit:
+            return HttpResponse(status=429)
 # Logs user out
 class twitter_logout(View):
     def get(self, request):
