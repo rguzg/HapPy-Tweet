@@ -1,2 +1,2 @@
 # HapPy-Tweet
-Using TextBlob and python-twitter to classify and show positive tweets from your timeline!
+Using TextBlob and tweepy to classify and show positive tweets from your timeline!
